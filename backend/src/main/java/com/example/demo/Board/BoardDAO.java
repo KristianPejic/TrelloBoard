@@ -21,14 +21,20 @@ public class BoardDAO {
             return new Board(rs.getInt("id"), name, color);
         });
     }
-    
-    public void saveBoard(Board board) {
-        String name = (board.getName() != null && !board.getName().isEmpty()) ? board.getName() : "Unnamed Board";
-        String color = (board.getColor() != null && !board.getColor().isEmpty()) ? board.getColor() : "#CCCCCC"; // Default gray color
-        
-        jdbcTemplate.update("INSERT INTO board (name, color) VALUES (?, ?)", name, color);
+
+    public Board getBoardById(int id) {
+        return jdbcTemplate.queryForObject(
+            "SELECT * FROM board WHERE id = ?",
+            (rs, rowNum) -> new Board(rs.getInt("id"), rs.getString("name"), rs.getString("color")),
+            id
+        );
     }
-    
+
+    public void saveBoard(Board board) {
+        String sql = "INSERT INTO board (name, color) VALUES (?, ?) RETURNING id";
+        int id = jdbcTemplate.queryForObject(sql, Integer.class, board.getName(), board.getColor());
+        board.setId(id); // Set the ID for the created board
+    }
 
     public void deleteBoard(int id) {
         jdbcTemplate.update("DELETE FROM board WHERE id = ?", id);

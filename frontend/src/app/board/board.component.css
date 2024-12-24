@@ -1,8 +1,36 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+h1 {
+  font-size: 36px;
+  color: #333;
+  margin-bottom: 30px;
+}
+
 .board-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  align-items: stretch;
+  gap: 20px;
+  justify-content: center;
 }
 
 .create-board {
@@ -11,11 +39,46 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  border: 2px dashed #ccc;
-  width: 200px;
-  height: 100px;
+  margin-bottom: 20px;
+  border: 2px dashed #007bff;
+  width: 250px;
+  height: 150px;
   box-sizing: border-box;
   text-align: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.create-board:hover {
+  border-color: #0056b3;
+  background-color: #e6f7ff;
+}
+
+.create-board input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 80%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.create-board button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-board button:hover {
+  background-color: #0056b3;
 }
 
 .board {
@@ -24,28 +87,53 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 200px;
-  min-height: 100px;
-  color: white;
+  width: 250px;
+  height: 150px;
   font-weight: bold;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #007bff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.delete-icon {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+.board:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.board a {
+  text-decoration: none;
+  font-weight: bold;
   color: white;
-  font-size: 16px;
+}
+
+.board .delete-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 20px;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
-  padding: 2px 6px;
-  transition: background-color 0.3s ease;
+  padding: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.delete-icon:hover {
+.board .delete-icon:hover {
   background-color: rgba(255, 0, 0, 0.7);
+  color: #ffffff;
+}
+
+.board:nth-child(2n) {
+  background-color: #28a745;
+}
+
+.board:nth-child(3n) {
+  background-color: #ffc107;
+}
+
+.board:nth-child(4n) {
+  background-color: #17a2b8;
 }

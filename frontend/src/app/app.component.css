@@ -1,0 +1,28 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: white;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.search-bar {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.search-bar:focus {
+  outline: none;
+  border: 2px solid #0071e9;
+}
+
+.content {
+  padding: 20px;
+}

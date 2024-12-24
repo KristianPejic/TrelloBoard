@@ -1,2 +1,20 @@
-<h1>Trello Board Ericsson</h1>
-<app-board></app-board>
+<div class="navbar">
+  <!-- Logo -->
+  <div class="navbar-left">
+    <h1 class="title">Trello Board Ericsson</h1>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="navbar-right">
+    <input
+      type="text"
+      placeholder="Search boards..."
+      class="search-bar"
+      (input)="onSearchInput($event)"
+    />
+  </div>
+</div>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>

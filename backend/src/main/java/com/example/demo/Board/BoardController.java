@@ -20,12 +20,22 @@ public class BoardController {
         return boardDAO.getAllBoards();
     }
 
-   @PostMapping
-    public Board createBoard(@RequestBody Board board) {
-    boardDAO.saveBoard(board);
-    return board; // Return the board object after saving
+    @GetMapping("/{id}")
+    public Board getBoardById(@PathVariable int id) {
+        try {
+            return boardDAO.getBoardById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Board not found with ID: " + id, e);
+        }
     }
 
+    @PostMapping
+    public Board createBoard(@RequestBody Board board) {
+        System.out.println("Creating board: " + board.getName());
+        boardDAO.saveBoard(board);
+        System.out.println("Board created: " + board);
+        return board;
+    }
 
     @DeleteMapping("/{id}")
     public void deleteBoard(@PathVariable int id) {

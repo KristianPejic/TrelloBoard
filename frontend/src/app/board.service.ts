@@ -12,7 +12,7 @@ export interface Board {
   providedIn: 'root',
 })
 export class BoardService {
-  private apiUrl = 'http://localhost:8080/boards'; // Your backend API
+  private apiUrl = 'http://localhost:8080/boards';
 
   constructor(private http: HttpClient) {}
 
@@ -20,10 +20,12 @@ export class BoardService {
     return this.http.get<Board[]>(this.apiUrl);
   }
 
-  createBoard(name: string): Observable<Board> {
-    const randomColor = this.getRandomColor();
-    const board: Board = { name, color: randomColor };
-    return this.http.post<Board>(this.apiUrl, board); // Expect the full board object
+  getBoardById(boardId: number): Observable<Board> {
+    return this.http.get<Board>(`${this.apiUrl}/${boardId}`);
+  }
+
+  createBoard(board: Board): Observable<Board> {
+    return this.http.post<Board>(this.apiUrl, board);
   }
   deleteBoard(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
