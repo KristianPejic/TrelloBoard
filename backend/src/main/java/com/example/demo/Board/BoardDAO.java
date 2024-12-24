@@ -33,7 +33,7 @@ public class BoardDAO {
     public void saveBoard(Board board) {
         String sql = "INSERT INTO board (name, color) VALUES (?, ?) RETURNING id";
         int id = jdbcTemplate.queryForObject(sql, Integer.class, board.getName(), board.getColor());
-        board.setId(id); // Set the ID for the created board
+        board.setId(id);
     }
 
     public void deleteBoard(int id) {

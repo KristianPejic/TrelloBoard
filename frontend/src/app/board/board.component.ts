@@ -31,17 +31,15 @@ export class BoardComponent implements OnInit {
   }
   addBoard(): void {
     if (this.newBoardName.trim()) {
-      // Create a Board object with name and a random color
       const newBoard: Board = {
         name: this.newBoardName.trim(),
-        color: this.getRandomColor(), // Generate a random color
+        color: this.getRandomColor(),
       };
 
-      // Call the createBoard service with the Board object
       this.boardService.createBoard(newBoard).subscribe(
         (createdBoard) => {
-          this.boards.push(createdBoard); // Add the new board to the list
-          this.newBoardName = ''; // Clear the input field
+          this.boards.push(createdBoard);
+          this.newBoardName = '';
           console.log('Board created:', createdBoard);
         },
         (error) => console.error('Error creating board:', error)
@@ -52,7 +50,7 @@ export class BoardComponent implements OnInit {
   fetchBoards(): void {
     this.boardService.getAllBoards().subscribe(
       (boards) => {
-        this.boards = boards; // Update the UI
+        this.boards = boards;
       },
       (error) => console.error('Error fetching boards:', error)
     );
@@ -73,23 +71,21 @@ export class BoardComponent implements OnInit {
         board.name.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     } else {
-      this.filteredBoards = [...this.boards]; // Reset to all boards if search term is empty
+      this.filteredBoards = [...this.boards];
     }
   }
   createBoard(): void {
     if (this.newBoardName.trim()) {
-      // Create a Board object with name and a random color
       const newBoard: Board = {
         name: this.newBoardName.trim(),
-        color: this.getRandomColor(), // Generate a random color
+        color: this.getRandomColor(),
       };
 
-      // Call the createBoard service with the Board object
       this.boardService.createBoard(newBoard).subscribe(
         (createdBoard) => {
-          this.boards.push(createdBoard); // Add the new board to the list dynamically
-          this.filteredBoards = [...this.boards]; // Update filtered boards
-          this.newBoardName = ''; // Clear the input field
+          this.boards.push(createdBoard);
+          this.filteredBoards = [...this.boards];
+          this.newBoardName = '';
           console.log('Board created:', createdBoard);
         },
         (error) => console.error('Error creating board:', error)
@@ -106,7 +102,7 @@ export class BoardComponent implements OnInit {
     return color;
   }
   deleteBoard(event: Event, id: number): void {
-    event.stopPropagation(); // Prevent navigation when clicking delete
+    event.stopPropagation();
     this.boardService.deleteBoard(id).subscribe(() => {
       this.boards = this.boards.filter((board) => board.id !== id);
       this.filterBoards();

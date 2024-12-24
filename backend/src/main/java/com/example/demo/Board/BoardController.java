@@ -6,7 +6,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/boards")
-@CrossOrigin(origins = "http://localhost:4200") // Allow requests from Angular frontend
+@CrossOrigin(origins = "http://localhost:4200")
 public class BoardController {
 
     private final BoardDAO boardDAO;

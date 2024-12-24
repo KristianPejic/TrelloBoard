@@ -9,10 +9,10 @@ import { SearchService } from './services/search.service';
 })
 export class AppComponent {
   constructor(private searchService: SearchService) {}
-
+  title = 'Trello Board';
   // Method to handle search input
   onSearchInput(event: Event): void {
-    const inputElement = event.target as HTMLInputElement; // Cast to HTMLInputElement
+    const inputElement = event.target as HTMLInputElement;
     this.searchService.updateSearchTerm(inputElement.value);
   }
 }

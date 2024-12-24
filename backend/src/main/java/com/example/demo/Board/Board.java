@@ -5,7 +5,7 @@ public class Board {
     private String name;
     private String color;
 
-    // Constructors
+   
     public Board() {}
 
     public Board(int id, String name, String color) {
@@ -14,7 +14,7 @@ public class Board {
         this.color = color;
     }
     
-    // Getters and Setters
+    
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

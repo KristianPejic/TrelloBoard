@@ -5,10 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SearchService {
-  private searchTermSource = new BehaviorSubject<string>(''); // Default empty search term
-  currentSearchTerm = this.searchTermSource.asObservable(); // Observable for components to subscribe to
+  private searchTermSource = new BehaviorSubject<string>('');
+  currentSearchTerm = this.searchTermSource.asObservable();
 
   updateSearchTerm(term: string): void {
-    this.searchTermSource.next(term); // Update search term dynamically
+    this.searchTermSource.next(term);
   }
 }

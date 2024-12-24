@@ -23,7 +23,6 @@ export class TaskBoardComponent implements OnInit {
   boardId!: number;
   boardName: string = 'Loading...';
 
-  // Default Columns
   columns: { name: string; status: string }[] = [
     { name: 'To Do', status: 'To Do' },
     { name: 'Doing', status: 'Doing' },
@@ -83,7 +82,6 @@ export class TaskBoardComponent implements OnInit {
         this.doingTasks = tasks.filter((task) => task.status === 'Doing');
         this.doneTasks = tasks.filter((task) => task.status === 'Done');
 
-        // Assign tasks to dynamic columns
         this.dynamicColumns.forEach((column) => {
           column.tasks = tasks.filter((task) => task.status === column.name);
         });
@@ -94,7 +92,7 @@ export class TaskBoardComponent implements OnInit {
     if (this.newTaskTitle.trim()) {
       const newTask: Task = {
         title: this.newTaskTitle,
-        status: 'To Do', // Default to "To Do"
+        status: 'To Do',
         boardId: this.boardId,
       };
 
