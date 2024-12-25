@@ -7,11 +7,15 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Board, BoardService } from '../board.service';
-
+interface Column {
+  name: string;
+  tasks: Task[];
+}
 @Component({
   selector: 'app-task-board',
   templateUrl: './task-board.component.html',
   styleUrls: ['./task-board.component.css'],
+
   standalone: false,
 })
 export class TaskBoardComponent implements OnInit {
@@ -152,6 +156,13 @@ export class TaskBoardComponent implements OnInit {
         console.error('Task ID is undefined!');
       }
     }
+  }
+  dropColumn(event: CdkDragDrop<Column[]>): void {
+    moveItemInArray(
+      this.dynamicColumns,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 
   deleteTask(task: Task): void {

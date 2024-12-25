@@ -7,7 +7,13 @@
   </button>
 </div>
 <div class="task-board">
-  <div class="task-columns">
+  <div
+    class="task-columns"
+    cdkDropList
+    [cdkDropListData]="dynamicColumns"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="dropColumn($event)"
+  >
     <div
       id="to-do-list"
       class="task-column"
