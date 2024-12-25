@@ -160,6 +160,21 @@ h1 {
 .board:nth-child(6n) {
   background-color: #6f42c1;
 }
+.progress-container {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  height: 20px;
+  width: 100%;
+  position: relative;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  background-color: #76c7c0;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
 
 @media (max-width: 768px) {
   .board-container {

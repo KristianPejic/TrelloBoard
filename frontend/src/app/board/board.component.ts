@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { BoardService, Board } from '../board.service';
 import { Router } from '@angular/router';
 import { SearchService } from '../services/search.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -13,6 +14,7 @@ export class BoardComponent implements OnInit {
   newBoardName: string = '';
   filteredBoards: Board[] = [];
   searchTerm: string = '';
+  @Input() boardId!: number;
 
   constructor(
     private boardService: BoardService,
@@ -24,6 +26,7 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.loadBoards();
     this.fetchBoards();
+
     this.searchService.currentSearchTerm.subscribe((term) => {
       this.searchTerm = term;
       this.filterBoards();

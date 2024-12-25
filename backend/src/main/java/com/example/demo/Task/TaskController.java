@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tasks")
@@ -30,6 +32,21 @@ public class TaskController {
             rs.getInt("board_id")
         )
     );
+}
+@GetMapping("/board/{boardId}/progress")
+public Map<String, Object> getProgressByBoard(@PathVariable int boardId) {
+    List<Task> tasks = taskDAO.getTasksByBoardId(boardId);
+
+    long totalTasks = tasks.size();
+    long doneTasks = tasks.stream().filter(task -> "done".equalsIgnoreCase(task.getStatus())).count();
+    double progress = totalTasks == 0 ? 0 : ((double) doneTasks / totalTasks) * 100;
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("totalTasks", totalTasks);
+    response.put("doneTasks", doneTasks);
+    response.put("progress", progress);
+
+    return response;
 }
     @PutMapping("/{id}/title")
         public void updateTaskTitle(@PathVariable int id, @RequestBody Task task) {

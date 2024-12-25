@@ -288,11 +288,36 @@ h1 {
 .return-button:hover {
   background-color: #003d80;
 }
+.progress-container {
+  width: 100%;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  margin: 10px 0;
+  position: relative;
+}
 
-/* Responsive Design */
+.progress-bar {
+  height: 20px;
+  background-color: #0056b3;
+  border-radius: 4px;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.progress-container p {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000000;
+}
+
 @media screen and (max-width: 768px) {
   .task-board {
-    flex-direction: column; /* Stack columns vertically on smaller screens */
+    flex-direction: column;
     align-items: center;
   }
 

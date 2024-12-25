@@ -1,8 +1,12 @@
 package com.example.demo.Board;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/boards")
@@ -10,7 +14,8 @@ import java.util.List;
 public class BoardController {
 
     private final BoardDAO boardDAO;
-
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
     public BoardController(BoardDAO boardDAO) {
         this.boardDAO = boardDAO;
     }
@@ -28,7 +33,6 @@ public class BoardController {
             throw new RuntimeException("Board not found with ID: " + id, e);
         }
     }
-
     @PostMapping
     public Board createBoard(@RequestBody Board board) {
         System.out.println("Creating board: " + board.getName());

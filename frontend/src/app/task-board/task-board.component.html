@@ -6,6 +6,10 @@
     ← Back to Boards
   </button>
 </div>
+<div class="progress-container">
+  <div class="progress-bar" [style.width]="progress + '%'"></div>
+  <p>{{ progress | number : "1.0-2" }}% Complete</p>
+</div>
 <div class="task-board">
   <div
     class="task-columns"

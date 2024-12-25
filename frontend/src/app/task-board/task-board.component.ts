@@ -26,6 +26,7 @@ export class TaskBoardComponent implements OnInit {
   showInput: boolean = false;
   boardId!: number;
   boardName: string = 'Loading...';
+  progress: number = 0;
 
   columns: { name: string; status: string }[] = [
     { name: 'To Do', status: 'To Do' },
@@ -49,6 +50,7 @@ export class TaskBoardComponent implements OnInit {
       this.boardId = +params['id'];
       this.fetchTasks();
       this.fetchBoardName();
+      this.fetchProgress();
     });
 
     this.initializeDropLists();
@@ -70,6 +72,17 @@ export class TaskBoardComponent implements OnInit {
       (error) => {
         console.error('Failed to fetch board name', error);
         this.boardName = 'Unknown Board';
+      }
+    );
+  }
+  fetchProgress(): void {
+    this.taskService.getBoardProgress(this.boardId).subscribe(
+      (data) => {
+        this.progress = data.progress;
+      },
+      (error) => {
+        console.error('Error fetching progress:', error);
+        this.progress = 0; // Default to 0 if there's an error
       }
     );
   }
@@ -149,6 +162,7 @@ export class TaskBoardComponent implements OnInit {
               event.previousIndex,
               event.currentIndex
             );
+            this.fetchProgress(); // Update progress after task status change
           },
           (err) => console.error('Error updating task status:', err)
         );

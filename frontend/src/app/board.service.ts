@@ -7,6 +7,7 @@ export interface Board {
   name: string;
   color: string;
 }
+const baseUrl = `http://localhost:4200`;
 
 @Injectable({
   providedIn: 'root',
