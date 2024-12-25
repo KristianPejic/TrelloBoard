@@ -3,11 +3,11 @@ FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 
 # Copy the pom.xml and download dependencies
-COPY pom.xml .
+COPY backend/pom.xml .
 RUN mvn dependency:go-offline -B
 
 # Copy the source code and build the application
-COPY src ./src
+COPY src backend/src
 RUN mvn clean package -DskipTests
 
 # Use a lightweight Java runtime for the final image
