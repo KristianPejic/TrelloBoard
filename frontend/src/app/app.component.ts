@@ -15,10 +15,8 @@ export class AppComponent implements OnInit {
   constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit(): void {
-    // Check the current route on load
     this.checkRouteForSearchBar(this.router.url);
 
-    // Listen for navigation events to update search bar visibility dynamically
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.checkRouteForSearchBar(event.urlAfterRedirects);
@@ -27,7 +25,6 @@ export class AppComponent implements OnInit {
   }
 
   private checkRouteForSearchBar(url: string): void {
-    // Show the search bar only on '/' or '/boards'
     this.showSearchBar = url === '/' || url === '/boards';
   }
 

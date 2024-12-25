@@ -82,7 +82,7 @@ export class TaskBoardComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching progress:', error);
-        this.progress = 0; // Default to 0 if there's an error
+        this.progress = 0;
       }
     );
   }
@@ -162,7 +162,7 @@ export class TaskBoardComponent implements OnInit {
               event.previousIndex,
               event.currentIndex
             );
-            this.fetchProgress(); // Update progress after task status change
+            this.fetchProgress();
           },
           (err) => console.error('Error updating task status:', err)
         );

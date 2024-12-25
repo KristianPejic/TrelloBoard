@@ -71,12 +71,12 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px; /* Space between tasks */
-  width: 100%; /* Stretch tasks to fill column width */
+  margin-bottom: 10px;
+  width: 100%;
   box-sizing: border-box;
-  word-wrap: break-word; /* Ensures long words wrap */
-  word-break: break-word; /* For older browsers */
-  overflow-wrap: break-word; /* Modern equivalent */
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .task:hover {
@@ -88,10 +88,10 @@ h1 {
   flex-grow: 1;
   text-align: left;
   margin-right: 10px;
-  word-wrap: break-word; /* Ensures long words wrap */
-  word-break: break-word; /* For older browsers */
-  overflow-wrap: break-word; /* Modern equivalent */
-  white-space: pre-wrap; /* Preserves spacing and breaks on long text */
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .task-actions {
