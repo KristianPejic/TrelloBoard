@@ -1,28 +1,41 @@
-<div *ngIf="filteredBoards.length === 0">
-  <h1>No boards found</h1>
-</div>
-
-<div class="board-container" *ngIf="filteredBoards.length > 0">
+<div class="board-container">
   <div class="create-board">
     <input [(ngModel)]="newBoardName" placeholder="Board Name" />
     <button (click)="createBoard()">Create New Board</button>
   </div>
 
-  <div
-    class="board"
-    *ngFor="let board of filteredBoards"
-    [style.backgroundColor]="board.color"
-  >
-    <a [routerLink]="['/board', board.id]" class="board-link">
-      <p>{{ board.name }}</p>
-    </a>
-
-    <span
-      class="delete-icon"
-      *ngIf="board.id !== undefined"
-      (click)="deleteBoard($event, board.id)"
-    >
-      &#x2715;
-    </span>
+  <div *ngIf="filteredBoards.length === 0">
+    <h1>No boards found,create a new one!</h1>
   </div>
+
+  <a
+    *ngFor="let board of filteredBoards"
+    [routerLink]="['/board', board.id]"
+    class="board-link"
+  >
+    <div class="board" [style.backgroundColor]="board.color">
+      <p class="board-name">{{ board.name }}</p>
+
+      <div class="divider"></div>
+
+      <span
+        class="delete-icon"
+        *ngIf="board.id !== undefined"
+        (click)="deleteBoard($event, board.id)"
+      >
+        🗑
+      </span>
+
+      <div class="progress-bar-container">
+        <p class="progress-label">Progress</p>
+        <div
+          class="progress-bar"
+          [style.width]="boardsProgress[board.id!] + '%' || '0%'"
+        ></div>
+        <p *ngIf="boardsProgress[board.id!] !== undefined">
+          {{ boardsProgress[board.id!] | number : "1.0-2" }}% Complete
+        </p>
+      </div>
+    </div>
+  </a>
 </div>

@@ -3,6 +3,7 @@ import { BoardService, Board } from '../board.service';
 import { Router } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { HttpClient } from '@angular/common/http';
+import { TaskService } from '../services/task.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -15,16 +16,16 @@ export class BoardComponent implements OnInit {
   filteredBoards: Board[] = [];
   searchTerm: string = '';
   @Input() boardId!: number;
-
+  boardsProgress: { [key: number]: number } = {};
   constructor(
     private boardService: BoardService,
     private router: Router,
     private searchService: SearchService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
-    this.loadBoards();
     this.fetchBoards();
 
     this.searchService.currentSearchTerm.subscribe((term) => {
@@ -54,20 +55,26 @@ export class BoardComponent implements OnInit {
     this.boardService.getAllBoards().subscribe(
       (boards) => {
         this.boards = boards;
+        this.filteredBoards = [...this.boards];
+
+        // Fetch progress for each board using TaskService
+        boards.forEach((board) => {
+          this.taskService.getBoardProgress(board.id!).subscribe(
+            (progressData) => {
+              this.boardsProgress[board.id!] = progressData.progress;
+            },
+            (error) =>
+              console.error(
+                `Error fetching progress for board ${board.id}:`,
+                error
+              )
+          );
+        });
       },
       (error) => console.error('Error fetching boards:', error)
     );
   }
 
-  loadBoards(): void {
-    this.boardService.getAllBoards().subscribe(
-      (data) => {
-        this.boards = data;
-        this.filteredBoards = [...this.boards];
-      },
-      (error) => console.error('Error fetching boards:', error)
-    );
-  }
   filterBoards(): void {
     if (this.searchTerm.trim()) {
       this.filteredBoards = this.boards.filter((board) =>
@@ -88,6 +95,7 @@ export class BoardComponent implements OnInit {
         (createdBoard) => {
           this.boards.push(createdBoard);
           this.filteredBoards = [...this.boards];
+          this.boardsProgress[createdBoard.id!] = 0; // Initialize progress to 0%
           this.newBoardName = '';
           console.log('Board created:', createdBoard);
         },
@@ -105,10 +113,11 @@ export class BoardComponent implements OnInit {
     return color;
   }
   deleteBoard(event: Event, id: number): void {
+    event.preventDefault();
     event.stopPropagation();
     this.boardService.deleteBoard(id).subscribe(() => {
       this.boards = this.boards.filter((board) => board.id !== id);
-      this.filterBoards();
+      this.filteredBoards = [...this.boards];
     });
   }
 }
