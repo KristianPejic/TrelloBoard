@@ -18,6 +18,9 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
+  updateTask(task: Task): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${task.id}`, task);
+  }
   getTasksByBoard(boardId: number): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl}/board/${boardId}`);
   }
@@ -39,7 +42,7 @@ export class TaskService {
     }>(`${this.apiUrl}/board/${boardId}/progress`);
   }
   updateTaskStatus(id: number, status: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, { status });
+    return this.http.put<void>(`${this.apiUrl}/${id}/status`, { status });
   }
 
   deleteTask(id: number): Observable<void> {

@@ -57,14 +57,18 @@ public Map<String, Object> getProgressByBoard(@PathVariable int boardId) {
         String sql = "INSERT INTO tasks (title, status, board_id) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, task.getTitle(), task.getStatus(), task.getBoardId());
 }
-    @PutMapping("/{id}")
-        public void updateTask(@PathVariable int id, @RequestBody Task task) {
-        jdbcTemplate.update("UPDATE tasks SET status = ? WHERE id = ?", task.getStatus(), id);
-    }
+@PutMapping("/{id}")
+public void updateTask(@PathVariable int id, @RequestBody Task task) {
+    jdbcTemplate.update("UPDATE tasks SET title = ?, status = ? WHERE id = ?", task.getTitle(), task.getStatus(), id);
+}
     @DeleteMapping("/{id}")
         public void deleteTask(@PathVariable int id) {
         jdbcTemplate.update("DELETE FROM tasks WHERE id = ?", id);
-    
     }
+    @PutMapping("/{id}/status")
+public void updateTaskStatus(@PathVariable int id, @RequestBody Map<String, String> request) {
+    String status = request.get("status");
+    jdbcTemplate.update("UPDATE tasks SET status = ? WHERE id = ?", status, id);
+}
 }
 

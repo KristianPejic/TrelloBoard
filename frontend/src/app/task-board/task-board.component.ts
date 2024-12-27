@@ -7,9 +7,12 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { Board, BoardService } from '../board.service';
+import { ColumnService } from '../services/column.service';
 interface Column {
   name: string;
   tasks: Task[];
+  showInput?: boolean;
+  newTaskTitle?: string;
 }
 @Component({
   selector: 'app-task-board',
@@ -23,18 +26,19 @@ export class TaskBoardComponent implements OnInit {
   doingTasks: Task[] = [];
   doneTasks: Task[] = [];
   newTaskTitle: string = '';
-  showInput: boolean = false;
   boardId!: number;
+  showInput: boolean = false;
   boardName: string = 'Loading...';
   progress: number = 0;
 
-  columns: { name: string; status: string }[] = [
-    { name: 'To Do', status: 'To Do' },
-    { name: 'Doing', status: 'Doing' },
-    { name: 'Done', status: 'Done' },
-  ];
+  dynamicColumns: {
+    name: string;
+    tasks: Task[];
+    showInput: boolean;
+    newTaskTitle: string;
+    position: number;
+  }[] = [];
 
-  dynamicColumns: { name: string; tasks: Task[] }[] = [];
   newColumnName: string = '';
   connectedDropLists: string[] = [];
 
@@ -42,7 +46,8 @@ export class TaskBoardComponent implements OnInit {
     private taskService: TaskService,
     private route: ActivatedRoute,
     private router: Router,
-    private boardService: BoardService
+    private boardService: BoardService,
+    private columnService: ColumnService
   ) {}
 
   ngOnInit(): void {
@@ -51,19 +56,16 @@ export class TaskBoardComponent implements OnInit {
       this.fetchTasks();
       this.fetchBoardName();
       this.fetchProgress();
+      this.loadDynamicColumns();
     });
-
     this.initializeDropLists();
   }
 
   initializeDropLists(): void {
-    this.connectedDropLists = ['to-do-list', 'doing-list', 'done-list'];
-    this.dynamicColumns.forEach((column) => {
-      const columnId = column.name.toLowerCase().replace(/\s+/g, '-');
-      this.connectedDropLists.push(columnId);
-    });
+    this.connectedDropLists = this.dynamicColumns.map((col) =>
+      col.name.toLowerCase().replace(/\s+/g, '-')
+    );
   }
-
   fetchBoardName(): void {
     this.boardService.getBoardById(this.boardId).subscribe(
       (board: Board) => {
@@ -95,80 +97,121 @@ export class TaskBoardComponent implements OnInit {
     this.taskService
       .getTasksByBoard(this.boardId)
       .subscribe((tasks: Task[]) => {
-        this.toDoTasks = tasks.filter((task) => task.status === 'To Do');
-        this.doingTasks = tasks.filter((task) => task.status === 'Doing');
-        this.doneTasks = tasks.filter((task) => task.status === 'Done');
+        // Clear existing tasks for each column but retain other properties
+        this.dynamicColumns.forEach((column) => (column.tasks = []));
 
-        this.dynamicColumns.forEach((column) => {
-          column.tasks = tasks.filter((task) => task.status === column.name);
+        // Assign tasks to the corresponding column
+        tasks.forEach((task) => {
+          const column = this.dynamicColumns.find(
+            (col) => col.name === task.status
+          );
+          if (column) {
+            column.tasks.push(task);
+          }
         });
       });
   }
 
-  addTask(): void {
-    if (this.newTaskTitle.trim()) {
+  addTask(column: {
+    name: string;
+    tasks: Task[];
+    showInput: boolean;
+    newTaskTitle: string;
+  }): void {
+    if (column.newTaskTitle?.trim()) {
       const newTask: Task = {
-        title: this.newTaskTitle,
-        status: 'To Do',
+        title: column.newTaskTitle.trim(),
+        status: column.name,
         boardId: this.boardId,
       };
 
       this.taskService.addTask(newTask).subscribe(
         () => {
-          this.fetchTasks();
-          this.newTaskTitle = '';
+          this.fetchTasks(); // Refresh tasks
+          column.newTaskTitle = ''; // Clear input
+          column.showInput = false; // Hide input
         },
-        (err) => console.error('Error adding task:', err)
+        (err) =>
+          console.error(`Error adding task to column "${column.name}":`, err)
       );
+    } else {
+      console.warn(`Task title is empty. Task not added.`);
     }
+  }
+  loadDynamicColumns(): void {
+    this.columnService.getColumns(this.boardId).subscribe((columns) => {
+      this.dynamicColumns = columns.map((column) => ({
+        name: column.name,
+        tasks: [],
+        showInput: false,
+        newTaskTitle: '',
+        position: column.position,
+      }));
+
+      this.taskService
+        .getTasksByBoard(this.boardId)
+        .subscribe((tasks: Task[]) => {
+          tasks.forEach((task) => {
+            const column = this.dynamicColumns.find(
+              (col) => col.name === task.status
+            );
+            if (column) {
+              column.tasks.push(task);
+            }
+          });
+
+          this.initializeDropLists();
+        });
+    });
   }
 
   addColumn(): void {
     if (this.newColumnName.trim()) {
-      const columnId = this.newColumnName.toLowerCase().replace(/\s+/g, '-');
-      this.dynamicColumns.push({ name: this.newColumnName, tasks: [] });
-      this.connectedDropLists.push(columnId);
-      this.newColumnName = '';
+      const newColumn = {
+        boardId: this.boardId,
+        status: this.newColumnName,
+        position: this.dynamicColumns.length, // Set the position as the next available slot
+      };
+
+      this.columnService.addColumn(newColumn).subscribe(() => {
+        this.dynamicColumns.push({
+          name: this.newColumnName,
+          tasks: [],
+          showInput: false,
+          newTaskTitle: '',
+          position: newColumn.position,
+        });
+        this.newColumnName = '';
+        this.initializeDropLists();
+      });
+    } else {
+      console.warn('Column name is empty. Column not added.');
     }
   }
 
+  getColumnId(columnName: string): string {
+    return columnName.toLowerCase().replace(/\s+/g, '-');
+  }
   deleteColumn(column: { name: string; tasks: Task[] }): void {
-    const index = this.dynamicColumns.indexOf(column);
-    if (index !== -1) {
-      this.dynamicColumns.splice(index, 1);
-      this.connectedDropLists = this.connectedDropLists.filter(
-        (id) => id !== column.name.toLowerCase().replace(/\s+/g, '-')
-      );
-    }
+    this.columnService.deleteColumn(this.boardId, column.name).subscribe(() => {
+      this.loadDynamicColumns();
+    });
   }
 
   drop(event: CdkDragDrop<Task[]>, targetStatus: string): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      const task = event.previousContainer.data[event.previousIndex];
-      task.status = targetStatus;
+    const task = event.previousContainer.data[event.previousIndex];
+    task.status = targetStatus;
 
-      if (task.id != undefined) {
-        this.taskService.updateTaskStatus(task.id, task.status).subscribe(
-          () => {
-            transferArrayItem(
-              event.previousContainer.data,
-              event.container.data,
-              event.previousIndex,
-              event.currentIndex
-            );
-            this.fetchProgress();
-          },
-          (err) => console.error('Error updating task status:', err)
+    if (task.id) {
+      this.taskService.updateTaskStatus(task.id, task.status).subscribe(() => {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
         );
-      } else {
-        console.error('Task ID is undefined!');
-      }
+        this.fetchProgress();
+      });
     }
   }
   dropColumn(event: CdkDragDrop<Column[]>): void {

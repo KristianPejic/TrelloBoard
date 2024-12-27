@@ -25,17 +25,6 @@
       >
         🗑
       </span>
-
-      <div class="progress-bar-container">
-        <p class="progress-label">Progress</p>
-        <div
-          class="progress-bar"
-          [style.width]="boardsProgress[board.id!] + '%' || '0%'"
-        ></div>
-        <p *ngIf="boardsProgress[board.id!] !== undefined">
-          {{ boardsProgress[board.id!] | number : "1.0-2" }}% Complete
-        </p>
-      </div>
     </div>
   </a>
 </div>
