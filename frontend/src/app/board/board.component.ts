@@ -57,7 +57,6 @@ export class BoardComponent implements OnInit {
         this.boards = boards;
         this.filteredBoards = [...this.boards];
 
-        // Fetch progress for each board using TaskService
         boards.forEach((board) => {
           this.taskService.getBoardProgress(board.id!).subscribe(
             (progressData) => {
@@ -95,7 +94,7 @@ export class BoardComponent implements OnInit {
         (createdBoard) => {
           this.boards.push(createdBoard);
           this.filteredBoards = [...this.boards];
-          this.boardsProgress[createdBoard.id!] = 0; // Initialize progress to 0%
+          this.boardsProgress[createdBoard.id!] = 0;
           this.newBoardName = '';
           console.log('Board created:', createdBoard);
         },

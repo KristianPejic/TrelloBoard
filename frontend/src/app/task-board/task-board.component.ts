@@ -97,10 +97,8 @@ export class TaskBoardComponent implements OnInit {
     this.taskService
       .getTasksByBoard(this.boardId)
       .subscribe((tasks: Task[]) => {
-        // Clear existing tasks for each column but retain other properties
         this.dynamicColumns.forEach((column) => (column.tasks = []));
 
-        // Assign tasks to the corresponding column
         tasks.forEach((task) => {
           const column = this.dynamicColumns.find(
             (col) => col.name === task.status
@@ -127,9 +125,9 @@ export class TaskBoardComponent implements OnInit {
 
       this.taskService.addTask(newTask).subscribe(
         () => {
-          this.fetchTasks(); // Refresh tasks
-          column.newTaskTitle = ''; // Clear input
-          column.showInput = false; // Hide input
+          this.fetchTasks();
+          column.newTaskTitle = '';
+          column.showInput = false;
         },
         (err) =>
           console.error(`Error adding task to column "${column.name}":`, err)
@@ -170,7 +168,7 @@ export class TaskBoardComponent implements OnInit {
       const newColumn = {
         boardId: this.boardId,
         status: this.newColumnName,
-        position: this.dynamicColumns.length, // Set the position as the next available slot
+        position: this.dynamicColumns.length,
       };
 
       this.columnService.addColumn(newColumn).subscribe(() => {
