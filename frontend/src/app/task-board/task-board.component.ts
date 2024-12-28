@@ -22,12 +22,7 @@ interface Column {
   standalone: false,
 })
 export class TaskBoardComponent implements OnInit {
-  toDoTasks: Task[] = [];
-  doingTasks: Task[] = [];
-  doneTasks: Task[] = [];
-  newTaskTitle: string = '';
   boardId!: number;
-  showInput: boolean = false;
   boardName: string = 'Loading...';
   progress: number = 0;
 
@@ -190,10 +185,20 @@ export class TaskBoardComponent implements OnInit {
   getColumnId(columnName: string): string {
     return columnName.toLowerCase().replace(/\s+/g, '-');
   }
-  deleteColumn(column: { name: string; tasks: Task[] }): void {
-    this.columnService.deleteColumn(this.boardId, column.name).subscribe(() => {
-      this.loadDynamicColumns();
-    });
+  deleteColumn(column: Column): void {
+    if (
+      confirm(`Are you sure you want to delete the column "${column.name}"?`)
+    ) {
+      this.columnService
+        .deleteColumn(this.boardId, column.name)
+        .subscribe(() => {
+          this.dynamicColumns = this.dynamicColumns.filter(
+            (col) => col.name !== column.name
+          );
+          this.initializeDropLists(); // Update drop lists after deletion
+          console.log(`Column "${column.name}" deleted successfully`);
+        });
+    }
   }
 
   drop(event: CdkDragDrop<Task[]>, targetStatus: string): void {

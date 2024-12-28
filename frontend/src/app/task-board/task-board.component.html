@@ -20,7 +20,12 @@
     [cdkDropListConnectedTo]="connectedDropLists"
     (cdkDropListDropped)="drop($event, column.name)"
   >
-    <h3>{{ column.name }}</h3>
+    <div class="column-header">
+      <h3>{{ column.name }}</h3>
+      <button class="delete-column-btn" (click)="deleteColumn(column)">
+        🗑
+      </button>
+    </div>
     <div class="task" *ngFor="let task of column.tasks" cdkDrag>
       <div class="task-content">
         <input *ngIf="task.isEditing" [(ngModel)]="task.title" />

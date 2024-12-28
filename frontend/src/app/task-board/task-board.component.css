@@ -123,11 +123,11 @@ h1 {
 }
 
 .delete-btn:hover {
-  color: #dc3545;
+  color: darkred;
 }
 
 .save-edit-btn {
-  background-color: #0056b3;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
@@ -135,10 +135,11 @@ h1 {
   cursor: pointer;
   font-size: 12px;
   margin-left: 5px;
+  margin-top: 4px;
 }
 
 .save-edit-btn:hover {
-  background-color: #007bff;
+  background-color: #0056b3;
 }
 
 .task.cdk-drag-preview {
@@ -313,6 +314,22 @@ h1 {
   font-size: 18px;
   font-weight: bold;
   color: #000000;
+}
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-column-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.delete-column-btn:hover {
+  color: darkred;
 }
 
 @media screen and (max-width: 768px) {

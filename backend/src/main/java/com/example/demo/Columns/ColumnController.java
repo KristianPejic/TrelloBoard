@@ -35,14 +35,17 @@ public class ColumnController {
     }
     
 
-    // Delete a column
     @DeleteMapping("/{boardId}/{name}")
     public void deleteColumn(@PathVariable int boardId, @PathVariable String name) {
         
-        String sql = "DELETE FROM columns WHERE board_id = ? AND name = ?";
-        jdbcTemplate.update(sql, boardId, name);
-    
         String deleteTasksSql = "DELETE FROM tasks WHERE board_id = ? AND status = ?";
-        jdbcTemplate.update(deleteTasksSql, boardId, name);
+        int tasksDeleted = jdbcTemplate.update(deleteTasksSql, boardId, name);
+        System.out.println("Deleted " + tasksDeleted + " tasks associated with column: " + name);
+    
+        
+        String deleteColumnSql = "DELETE FROM columns WHERE board_id = ? AND name = ?";
+        int columnsDeleted = jdbcTemplate.update(deleteColumnSql, boardId, name);
+        System.out.println("Deleted " + columnsDeleted + " columns with name: " + name);
     }
+    
 }
