@@ -31,15 +31,6 @@ export class BoardService {
   deleteBoard(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-  getBoardProgress(
-    boardId: number
-  ): Observable<{ totalTasks: number; doneTasks: number; progress: number }> {
-    return this.http.get<{
-      totalTasks: number;
-      doneTasks: number;
-      progress: number;
-    }>(`${this.apiUrl}/board/${boardId}/progress`);
-  }
   private getRandomColor(): string {
     const letters = '0123456789ABCDEF';
     let color = '#';

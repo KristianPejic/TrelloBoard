@@ -183,7 +183,7 @@ export class TaskBoardComponent implements OnInit {
           this.dynamicColumns = this.dynamicColumns.filter(
             (col) => col.name !== column.name
           );
-          this.initializeDropLists(); // Update drop lists after deletion
+          this.initializeDropLists();
           console.log(`Column "${column.name}" deleted successfully`);
         });
     }
