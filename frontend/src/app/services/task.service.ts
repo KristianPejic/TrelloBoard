@@ -32,15 +32,6 @@ export class TaskService {
   addTask(task: Task): Observable<void> {
     return this.http.post<void>(this.apiUrl, task);
   }
-  getBoardProgress(
-    boardId: number
-  ): Observable<{ totalTasks: number; doneTasks: number; progress: number }> {
-    return this.http.get<{
-      totalTasks: number;
-      doneTasks: number;
-      progress: number;
-    }>(`${this.apiUrl}/board/${boardId}/progress`);
-  }
   updateTaskStatus(id: number, status: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}/status`, { status });
   }
