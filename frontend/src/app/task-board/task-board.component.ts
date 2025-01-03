@@ -24,7 +24,6 @@ interface Column {
 export class TaskBoardComponent implements OnInit {
   boardId!: number;
   boardName: string = 'Loading...';
-  progress: number = 0;
 
   dynamicColumns: {
     name: string;

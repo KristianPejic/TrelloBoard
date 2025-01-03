@@ -56,19 +56,6 @@ export class BoardComponent implements OnInit {
       (boards) => {
         this.boards = boards;
         this.filteredBoards = [...this.boards];
-
-        boards.forEach((board) => {
-          this.taskService.getBoardProgress(board.id!).subscribe(
-            (progressData) => {
-              this.boardsProgress[board.id!] = progressData.progress;
-            },
-            (error) =>
-              console.error(
-                `Error fetching progress for board ${board.id}:`,
-                error
-              )
-          );
-        });
       },
       (error) => console.error('Error fetching boards:', error)
     );
