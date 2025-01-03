@@ -16,7 +16,7 @@ export class BoardComponent implements OnInit {
   filteredBoards: Board[] = [];
   searchTerm: string = '';
   @Input() boardId!: number;
-  boardsProgress: { [key: number]: number } = {};
+
   constructor(
     private boardService: BoardService,
     private router: Router,
@@ -81,7 +81,6 @@ export class BoardComponent implements OnInit {
         (createdBoard) => {
           this.boards.push(createdBoard);
           this.filteredBoards = [...this.boards];
-          this.boardsProgress[createdBoard.id!] = 0;
           this.newBoardName = '';
           console.log('Board created:', createdBoard);
         },
