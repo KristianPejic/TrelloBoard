@@ -119,6 +119,7 @@ export class TaskBoardComponent implements OnInit {
     }
   }
   loadDynamicColumns(): void {
+    this.dynamicColumns = [];
     this.columnService.getColumns(this.boardId).subscribe((columns) => {
       this.dynamicColumns = columns.map((column) => ({
         name: column.name,
@@ -128,20 +129,8 @@ export class TaskBoardComponent implements OnInit {
         position: column.position,
       }));
 
-      this.taskService
-        .getTasksByBoard(this.boardId)
-        .subscribe((tasks: Task[]) => {
-          tasks.forEach((task) => {
-            const column = this.dynamicColumns.find(
-              (col) => col.name === task.status
-            );
-            if (column) {
-              column.tasks.push(task);
-            }
-          });
-
-          this.initializeDropLists();
-        });
+      this.fetchTasks();
+      this.initializeDropLists();
     });
   }
 

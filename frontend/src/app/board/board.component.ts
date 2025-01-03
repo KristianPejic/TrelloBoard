@@ -27,7 +27,6 @@ export class BoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchBoards();
-
     this.searchService.currentSearchTerm.subscribe((term) => {
       this.searchTerm = term;
       this.filterBoards();
